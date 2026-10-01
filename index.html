@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Prep 3 Science - Types of Chemical Reactions Quiz (50 Questions)</title>
+    <title>Prep 3 Science - Types of Chemical Reactions Quiz (40 Questions)</title>
     <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
     <style>
         :root {
@@ -152,28 +152,43 @@
         .review-item { border: 1px solid var(--border); border-radius: 8px; padding: .75rem 1rem; margin-bottom: .75rem; }
         .review-item small { color: var(--text-muted); display: block; margin-top: .25rem; }
         .btn:focus-visible, .option-btn:focus-visible { outline: 3px solid #93c5fd; outline-offset: 2px; }
+
+        .btn-secondary { background-color: #64748b; box-shadow: none; }
+        .btn-secondary:hover { background-color: #475569; }
+        .btn-danger { background-color: #ef4444; box-shadow: none; padding: .5rem 1rem; font-size: .9rem; }
+        .btn-danger:hover { background-color: #dc2626; }
+        .history { text-align: left; margin-top: 1.5rem; }
+        .history h3 { margin: 0 0 .75rem 0; }
+        .history-item { border: 1px solid var(--border); border-radius: 8px; padding: .6rem 1rem; margin-bottom: .6rem; }
+        .history-item summary { cursor: pointer; display: flex; justify-content: space-between; gap: 1rem; font-weight: 600; }
+        .history-item .pct { color: var(--primary); }
+        .history-item ul { margin: .75rem 0 0 0; padding-left: 1.2rem; color: var(--text-main); font-size: .9rem; }
+        .history-item li { margin-bottom: .5rem; }
+        .history-empty { color: var(--text-muted); }
+        .history-actions { display: flex; gap: .75rem; flex-wrap: wrap; margin-top: .75rem; }
     </style>
 </head>
 <body>
 
     <header>
         <h1>Prep 3 Science Interactive Quiz</h1>
-        <p>Comprehensive 50-Question Assessment on Types of Chemical Reactions</p>
+        <p>Comprehensive 40-Question Assessment on Types of Chemical Reactions</p>
     </header>
 
     <main>
         <!-- Start Screen -->
         <div id="start-screen" class="card start-screen">
             <h2>Ready to Test Your Knowledge?</h2>
-            <p>This quiz contains 50 questions from Unit 1, Lesson 1 – Types of Chemical Reactions. Questions are shuffled each time, and you get instant rationales.</p>
-            <button id="start-btn" class="btn" type="button">Start 50-Question Quiz</button>
+            <p>This quiz contains 40 questions from Unit 1, Lesson 1 – Types of Chemical Reactions. Questions are shuffled each time, and you get instant rationales.</p>
+            <button id="start-btn" class="btn" type="button">Start 40-Question Quiz</button>
+            <div id="history-start" class="history"></div>
         </div>
 
         <!-- Quiz Screen -->
         <div id="quiz-screen" class="card hidden">
             <div class="progress"><div id="progress-bar" class="progress-bar"></div></div>
             <div class="quiz-header">
-                <span id="question-counter">Question 1 of 50</span>
+                <span id="question-counter">Question 1 of 40</span>
                 <span id="score-tracker">Score: 0</span>
             </div>
             <div id="question-container" class="question-text"></div>
@@ -190,9 +205,11 @@
         <div id="results-screen" class="card results-screen hidden">
             <h2>Quiz Completed!</h2>
             <p>Here is your final performance:</p>
-            <div id="final-score" class="score-display">0 / 50</div>
+            <div id="final-score" class="score-display">0 / 40</div>
             <p id="result-message"></p>
             <button id="restart-btn" class="btn" type="button">Try Again</button>
+            <button id="home-btn" class="btn btn-secondary" type="button">My Saved Results</button>
+            <p id="save-note" style="color:var(--text-muted);font-size:.85rem;"></p>
             <div id="review" class="review-list"></div>
         </div>
     </main>
@@ -625,126 +642,6 @@
             },
             {
                 questionNumber: 36,
-                question: "In classical concept, what is oxidation defined as?",
-                answerOptions: [
-                    { text: "A chemical process that results in an increase in oxygen percentage or decrease in hydrogen percentage", isCorrect: true, rationale: "Classical definition: gain of oxygen or loss of hydrogen." },
-                    { text: "A chemical process where an atom gains electrons", isCorrect: false, rationale: "Gaining electrons is reduction in electronic concept." },
-                    { text: "A process that decreases oxygen percentage", isCorrect: false, rationale: "Decreasing oxygen is reduction in classical concept." },
-                    { text: "A process where atomic nucleus loses protons", isCorrect: false, rationale: "Proton loss relates to nuclear transformations, not chemical oxidation." }
-                ],
-                hint: "Think 'Oxid-ation' -> gain of oxygen.",
-                tags: ["oxidation", "classical_concept"]
-            },
-            {
-                questionNumber: 37,
-                question: "In classical concept, what is reduction defined as?",
-                answerOptions: [
-                    { text: "A chemical process that results in a decrease in oxygen percentage or increase in hydrogen percentage", isCorrect: true, rationale: "Classical definition: loss of oxygen or gain of hydrogen." },
-                    { text: "A process where an atom loses electrons", isCorrect: false, rationale: "Losing electrons is oxidation in electronic concept." },
-                    { text: "A process that increases oxygen percentage", isCorrect: false, rationale: "Increasing oxygen percentage defines oxidation." },
-                    { text: "A process of breaking covalent bonds using heat", isCorrect: false, rationale: "Thermal decomposition breaks bonds using heat." }
-                ],
-                hint: "Reduction reduces the oxygen content of a compound.",
-                tags: ["reduction", "classical_concept"]
-            },
-            {
-                questionNumber: 38,
-                question: "When dry hydrogen gas is passed over hot black copper oxide (CuO), what happens to the copper oxide?",
-                answerOptions: [
-                    { text: "It is reduced to red/brown metallic copper", isCorrect: true, rationale: "H2 + CuO -> Cu + H2O. CuO loses oxygen, so it undergoes reduction to copper metal." },
-                    { text: "It is oxidized to copper nitrate", isCorrect: false, rationale: "Nitrate requires nitric acid." },
-                    { text: "It decomposes into carbon dioxide and copper", isCorrect: false, rationale: "No carbon is involved." },
-                    { text: "It turns into white magnesium oxide", isCorrect: false, rationale: "Magnesium is not present." }
-                ],
-                hint: "CuO loses its oxygen atom to hydrogen gas.",
-                tags: ["redox", "classical_concept"]
-            },
-            {
-                questionNumber: 39,
-                question: "In the reaction H2 + CuO -> Cu + H2O, which substance acts as the reducing agent?",
-                answerOptions: [
-                    { text: "Hydrogen gas (H2)", isCorrect: true, rationale: "Hydrogen takes oxygen away from CuO, causing reduction of CuO while itself being oxidized." },
-                    { text: "Copper oxide (CuO)", isCorrect: false, rationale: "CuO supplies oxygen, acting as the oxidizing agent." },
-                    { text: "Metallic copper (Cu)", isCorrect: false, rationale: "Copper is a product, not a reactant agent." },
-                    { text: "Water (H2O)", isCorrect: false, rationale: "Water is a product." }
-                ],
-                hint: "The substance that takes oxygen away is the reducing agent.",
-                tags: ["reducing_agent", "classical_concept"]
-            },
-            {
-                questionNumber: 40,
-                question: "According to the modern (electronic) concept, what is oxidation?",
-                answerOptions: [
-                    { text: "A chemical process in which an atom or ion loses one or more electrons", isCorrect: true, rationale: "Modern concept: Oxidation Is Loss of electrons (OIL)." },
-                    { text: "A chemical process in which an atom or ion gains one or more electrons", isCorrect: false, rationale: "Gaining electrons is reduction (RIG)." },
-                    { text: "A process involving gain of oxygen only", isCorrect: false, rationale: "Gain of oxygen is classical definition, not electronic." },
-                    { text: "A process where total charge becomes more negative", isCorrect: false, rationale: "More negative charge implies gain of electrons (reduction)." }
-                ],
-                hint: "Remember the acronym OIL RIG (Oxidation Is Loss, Reduction Is Gain).",
-                tags: ["oxidation", "electronic_concept"]
-            },
-            {
-                questionNumber: 41,
-                question: "According to the modern (electronic) concept, what is reduction?",
-                answerOptions: [
-                    { text: "A chemical process in which an atom or ion gains one or more electrons", isCorrect: true, rationale: "Modern concept: Reduction Is Gain of electrons (RIG)." },
-                    { text: "A chemical process in which an atom or ion loses one or more electrons", isCorrect: false, rationale: "Losing electrons is oxidation." },
-                    { text: "A process that releases carbon dioxide", isCorrect: false, rationale: "CO2 release is characteristic of carbonate decomposition." },
-                    { text: "A process where valence increases", isCorrect: false, rationale: "Valence charge increases during electron loss (oxidation)." }
-                ],
-                hint: "Remember OIL RIG.",
-                tags: ["reduction", "electronic_concept"]
-            },
-            {
-                questionNumber: 42,
-                question: "In the electronic concept, what is an oxidizing agent?",
-                answerOptions: [
-                    { text: "The substance that gains one or more electrons during a chemical reaction", isCorrect: true, rationale: "An oxidizing agent causes another substance to lose electrons by accepting/gaining those electrons itself." },
-                    { text: "The substance that loses one or more electrons", isCorrect: false, rationale: "Losing electrons defines a reducing agent." },
-                    { text: "The substance that increases hydrogen percentage", isCorrect: false, rationale: "Increasing hydrogen percentage is classical reduction." },
-                    { text: "A catalyst that speeds up liquid decomposition", isCorrect: false, rationale: "An oxidizing agent is a reactant undergoing reduction." }
-                ],
-                hint: "The oxidizing agent gets reduced (gains electrons).",
-                tags: ["oxidizing_agent", "electronic_concept"]
-            },
-            {
-                questionNumber: 43,
-                question: "In the electronic concept, what is a reducing agent?",
-                answerOptions: [
-                    { text: "The substance that loses one or more electrons during a chemical reaction", isCorrect: true, rationale: "A reducing agent donates/loses electrons to reduce another species." },
-                    { text: "The substance that gains electrons", isCorrect: false, rationale: "Gaining electrons defines an oxidizing agent." },
-                    { text: "The substance that provides oxygen atoms", isCorrect: false, rationale: "Providing oxygen defines an oxidizing agent in classical terms." },
-                    { text: "An inert gas that prevents oxidation", isCorrect: false, rationale: "Inert gases do not participate as reducing agents here." }
-                ],
-                hint: "The reducing agent gets oxidized (loses electrons).",
-                tags: ["reducing_agent", "electronic_concept"]
-            },
-            {
-                questionNumber: 44,
-                question: "Consider 2Na + Cl2 -> 2NaCl. Which species undergoes oxidation in terms of electrons?",
-                answerOptions: [
-                    { text: "Sodium (Na)", isCorrect: true, rationale: "Na -> Na+ + e-. Sodium atoms lose electrons, undergoing oxidation." },
-                    { text: "Chlorine gas (Cl2)", isCorrect: false, rationale: "Cl2 + 2e- -> 2Cl-. Chlorine gains electrons, undergoing reduction." },
-                    { text: "Sodium chloride (NaCl)", isCorrect: false, rationale: "NaCl is the ionic compound product." },
-                    { text: "Neither species", isCorrect: false, rationale: "This is a classic redox reaction." }
-                ],
-                hint: "Metals lose electrons to form positive ions (cations).",
-                tags: ["redox", "sodium_chlorine"]
-            },
-            {
-                questionNumber: 45,
-                question: "Why are oxidation and reduction considered concurrent (simultaneous) processes?",
-                answerOptions: [
-                    { text: "Because the number of electrons lost in oxidation equals the number of electrons gained in reduction at the same time", isCorrect: true, rationale: "Electrons lost by the oxidized species must be simultaneously accepted by the reduced species." },
-                    { text: "Because both require heat energy to take place", isCorrect: false, rationale: "Many redox reactions occur spontaneously without heat." },
-                    { text: "Because they both produce water molecules", isCorrect: false, rationale: "Water is not produced in all redox reactions." },
-                    { text: "Because they only happen in sealed test tubes", isCorrect: false, rationale: "Reaction containers do not dictate concurrent electron transfer." }
-                ],
-                hint: "Electrons cannot exist freely in solution; lost electrons must be gained immediately.",
-                tags: ["redox", "concurrent_processes"]
-            },
-            {
-                questionNumber: 46,
                 question: "When metal hydroxides undergo thermal decomposition, what products are formed?",
                 answerOptions: [
                     { text: "Metal oxide and water vapour", isCorrect: true, rationale: "Metal hydroxides decompose on heating to form metal oxide and evolve water vapour." },
@@ -756,7 +653,7 @@
                 tags: ["metal_hydroxides", "decomposition"]
             },
             {
-                questionNumber: 47,
+                questionNumber: 37,
                 question: "What is the balanced equation for the thermal decomposition of blue copper hydroxide?",
                 answerOptions: [
                     { text: "Cu(OH)2(s) -> CuO(s) + H2O(g)", isCorrect: true, rationale: "Blue copper hydroxide decomposes upon heating into black copper oxide solid and water vapour." },
@@ -768,7 +665,7 @@
                 tags: ["equations", "copper_hydroxide"]
             },
             {
-                questionNumber: 48,
+                questionNumber: 38,
                 question: "What products are formed when alkali metal nitrates, such as sodium nitrate, undergo thermal decomposition?",
                 answerOptions: [
                     { text: "Metal nitrite and oxygen gas", isCorrect: true, rationale: "Metal nitrates (such as sodium nitrate) decompose on heating to yield metal nitrites and oxygen gas." },
@@ -780,7 +677,7 @@
                 tags: ["metal_nitrates", "decomposition"]
             },
             {
-                questionNumber: 49,
+                questionNumber: 39,
                 question: "What color change is observed when white sodium nitrate is heated in a test tube?",
                 answerOptions: [
                     { text: "It changes from white to yellowish-white", isCorrect: true, rationale: "White sodium nitrate (NaNO3) decomposes to yellowish-white sodium nitrite (NaNO2)." },
@@ -792,7 +689,7 @@
                 tags: ["sodium_nitrate", "observations"]
             },
             {
-                questionNumber: 50,
+                questionNumber: 40,
                 question: "What is the balanced symbolic equation for the thermal decomposition of sodium nitrate?",
                 answerOptions: [
                     { text: "2NaNO3(s) -> 2NaNO2(s) + O2(g)", isCorrect: true, rationale: "Two moles of white sodium nitrate decompose on heating into two moles of yellowish-white sodium nitrite and one mole of oxygen gas." },
@@ -804,6 +701,115 @@
                 tags: ["equations", "sodium_nitrate"]
             }
         ];
+
+
+        /* ---------- Saved results (stored in this browser) ---------- */
+        const STORE_KEY = "prep3_chem_quiz_results_v1";
+
+        function loadResults() {
+            try { return JSON.parse(localStorage.getItem(STORE_KEY)) || []; }
+            catch (e) { return []; }
+        }
+
+        function saveResult(entry) {
+            try {
+                const all = loadResults();
+                all.unshift(entry);
+                localStorage.setItem(STORE_KEY, JSON.stringify(all.slice(0, 100)));
+                return true;
+            } catch (e) { return false; }
+        }
+
+        function clearResults() {
+            if (!confirm("Delete all saved results from this browser?")) return;
+            try { localStorage.removeItem(STORE_KEY); } catch (e) {}
+            renderHistory();
+        }
+
+        function exportCSV() {
+            const rows = [["Date", "Score", "Total", "Percent"]];
+            loadResults().forEach(r => rows.push([new Date(r.date).toLocaleString(), r.score, r.total, r.percent + "%"]));
+            const csv = rows.map(r => r.map(v => '"' + String(v).replace(/"/g, '""') + '"').join(",")).join("\n");
+            const a = document.createElement("a");
+            a.href = URL.createObjectURL(new Blob([csv], { type: "text/csv" }));
+            a.download = "quiz-results.csv";
+            a.click();
+            URL.revokeObjectURL(a.href);
+        }
+
+        function renderHistory() {
+            const box = $("history-start");
+            box.innerHTML = "";
+            const all = loadResults();
+            const h = document.createElement("h3");
+            h.textContent = "My Saved Results";
+            box.appendChild(h);
+
+            if (!all.length) {
+                const p = document.createElement("p");
+                p.className = "history-empty";
+                p.textContent = "No saved results yet. Finish a quiz and it will appear here.";
+                box.appendChild(p);
+                return;
+            }
+
+            const best = Math.max(...all.map(r => r.percent));
+            const summary = document.createElement("p");
+            summary.className = "history-empty";
+            summary.textContent = `Attempts: ${all.length}  |  Best score: ${best}%`;
+            box.appendChild(summary);
+
+            all.forEach(r => {
+                const d = document.createElement("details");
+                d.className = "history-item";
+                const sum = document.createElement("summary");
+                const left = document.createElement("span");
+                left.textContent = new Date(r.date).toLocaleString();
+                const right = document.createElement("span");
+                right.className = "pct";
+                right.textContent = `${r.score} / ${r.total} (${r.percent}%)`;
+                sum.append(left, right);
+                d.appendChild(sum);
+
+                const ul = document.createElement("ul");
+                if (r.missed && r.missed.length) {
+                    r.missed.forEach(m => {
+                        const li = document.createElement("li");
+                        li.textContent = `${fmt(m.q)} — Your answer: ${fmt(m.yours)} | Correct: ${fmt(m.correct)}`;
+                        ul.appendChild(li);
+                    });
+                } else {
+                    const li = document.createElement("li");
+                    li.textContent = "No missed questions. Perfect score!";
+                    ul.appendChild(li);
+                }
+                d.appendChild(ul);
+                box.appendChild(d);
+            });
+
+            const actions = document.createElement("div");
+            actions.className = "history-actions";
+            const exp = document.createElement("button");
+            exp.type = "button"; exp.className = "btn btn-secondary";
+            exp.style.cssText = "padding:.5rem 1rem;font-size:.9rem;margin-top:0;";
+            exp.textContent = "Download CSV";
+            exp.addEventListener("click", exportCSV);
+            const clr = document.createElement("button");
+            clr.type = "button"; clr.className = "btn btn-danger";
+            clr.style.marginTop = "0";
+            clr.textContent = "Clear history";
+            clr.addEventListener("click", clearResults);
+            actions.append(exp, clr);
+            box.appendChild(actions);
+        }
+
+        function goHome() {
+            $("results-screen").classList.add("hidden");
+            $("quiz-screen").classList.add("hidden");
+            $("start-screen").classList.remove("hidden");
+            renderHistory();
+            window.scrollTo({ top: 0, behavior: "smooth" });
+        }
 
         /* ---------- Quiz logic ---------- */
         const $ = id => document.getElementById(id);
@@ -907,6 +913,16 @@
             $("final-score").textContent = `${score} / ${order.length}`;
 
             const pct = (score / order.length) * 100;
+            const saved = saveResult({
+                date: new Date().toISOString(),
+                score: score,
+                total: order.length,
+                percent: Math.round(pct),
+                missed: missed
+            });
+            $("save-note").textContent = saved
+                ? "✅ Your result was saved on this device/browser."
+                : "⚠️ Could not save the result (browser storage is blocked).";
             let msg;
             if (pct >= 90) {
                 msg = "Outstanding! You have mastered Types of Chemical Reactions!";
@@ -938,6 +954,8 @@
         document.addEventListener("DOMContentLoaded", () => {
             $("start-btn").addEventListener("click", startQuiz);
             $("restart-btn").addEventListener("click", startQuiz);
+            $("home-btn").addEventListener("click", goHome);
+            renderHistory();
             $("next-btn").addEventListener("click", nextQuestion);
             $("hint-btn").addEventListener("click", showHint);
 
