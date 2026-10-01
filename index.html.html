@@ -1,0 +1,937 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Prep 3 Science - Types of Chemical Reactions Quiz (50 Questions)</title>
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+    <style>
+        :root {
+            --primary: #4f46e5;
+            --primary-hover: #4338ca;
+            --bg-color: #f8fafc;
+            --card-bg: #ffffff;
+            --text-main: #1e293b;
+            --text-muted: #64748b;
+            --border: #e2e8f0;
+            --success: #10b981;
+            --error: #ef4444;
+        }
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-main);
+            margin: 0;
+            padding: 0;
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+        }
+        header {
+            background: linear-gradient(135deg, #4f46e5, #3b82f6);
+            color: white;
+            padding: 2rem 1rem;
+            text-align: center;
+            box-shadow: 0 4px 6px -1px rgba(0,0,0,0.1);
+        }
+        header h1 {
+            margin: 0 0 0.5rem 0;
+            font-size: 1.8rem;
+        }
+        header p {
+            margin: 0;
+            opacity: 0.9;
+            font-size: 1rem;
+        }
+        main {
+            flex: 1;
+            max-width: 800px;
+            width: 100%;
+            margin: 2rem auto;
+            padding: 0 1rem;
+            box-sizing: border-box;
+        }
+        .card {
+            background: var(--card-bg);
+            border-radius: 12px;
+            box-shadow: 0 10px 15px -3px rgba(0,0,0,0.05), 0 4px 6px -4px rgba(0,0,0,0.05);
+            padding: 2rem;
+            margin-bottom: 2rem;
+        }
+        .start-screen, .results-screen {
+            text-align: center;
+        }
+        .btn {
+            background-color: var(--primary);
+            color: white;
+            border: none;
+            padding: 0.75rem 2rem;
+            font-size: 1rem;
+            font-weight: 600;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: background-color 0.2s, transform 0.1s;
+            box-shadow: 0 4px 6px -1px rgba(79, 70, 229, 0.2);
+            margin-top: 1rem;
+        }
+        .btn:hover {
+            background-color: var(--primary-hover);
+            transform: translateY(-1px);
+        }
+        .btn:active {
+            transform: translateY(0);
+        }
+        .quiz-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.5rem;
+            border-bottom: 2px solid var(--border);
+            padding-bottom: 0.75rem;
+            font-weight: 600;
+            color: var(--text-muted);
+        }
+        .question-text {
+            font-size: 1.2rem;
+            font-weight: 600;
+            margin-bottom: 1.5rem;
+            line-height: 1.5;
+        }
+        .options-container {
+            display: flex;
+            flex-direction: column;
+            gap: 0.75rem;
+            margin-bottom: 1.5rem;
+        }
+        .option-btn {
+            background: white;
+            border: 2px solid var(--border);
+            padding: 1rem;
+            text-align: left;
+            border-radius: 8px;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: all 0.2s;
+            color: var(--text-main);
+            font-weight: 500;
+        }
+        .option-btn:hover:not(:disabled) {
+            border-color: var(--primary);
+            background-color: #f1f5f9;
+        }
+        .option-btn.correct {
+            background-color: #ecfdf5 !important;
+            border-color: var(--success) !important;
+            color: #065f46 !important;
+        }
+        .option-btn.incorrect {
+            background-color: #fef2f2 !important;
+            border-color: var(--error) !important;
+            color: #991b1b !important;
+        }
+        .rationale-box {
+            background-color: #f1f5f9;
+            border-left: 4px solid var(--primary);
+            padding: 1rem;
+            border-radius: 0 8px 8px 0;
+            margin-top: 1rem;
+            font-size: 0.95rem;
+            line-height: 1.4;
+            display: none;
+        }
+        .nav-footer {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 1.5rem;
+            border-top: 1px solid var(--border);
+            padding-top: 1rem;
+        }
+        .hidden {
+            display: none !important;
+        }
+        .score-display {
+            font-size: 3rem;
+            font-weight: bold;
+            color: var(--primary);
+            margin: 1rem 0;
+        }
+        footer {
+            text-align: center;
+            padding: 1rem;
+            color: var(--text-muted);
+            font-size: 0.85rem;
+            border-top: 1px solid var(--border);
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <h1>Prep 3 Science Interactive Quiz</h1>
+        <p>Comprehensive 50-Question Assessment on Types of Chemical Reactions</p>
+    </header>
+
+    <main>
+        <!-- Start Screen -->
+        <div id="start-screen" class="card start-screen">
+            <h2>Ready to Test Your Knowledge?</h2>
+            <p>This quiz contains 50 questions meticulously designed from your Prep 3 Science curriculum materials (Unit 1: Lesson 1 - Types of Chemical Reactions). Answer each question carefully and review instant rationales!</p>
+            <button class="btn" onclick="startQuiz()">Start 50-Question Quiz</button>
+        </div>
+
+        <!-- Quiz Screen -->
+        <div id="quiz-screen" class="card hidden">
+            <div class="quiz-header">
+                <span id="question-counter">Question 1 of 50</span>
+                <span id="score-tracker">Score: 0</span>
+            </div>
+            <div id="question-container" class="question-text"></div>
+            <div id="options-container" class="options-container"></div>
+            <div id="rationale-box" class="rationale-box"></div>
+            <div class="nav-footer">
+                <button id="hint-btn" class="btn" style="background-color: #64748b; padding: 0.5rem 1rem; font-size: 0.9rem;" onclick="showHint()">Show Hint</button>
+                <button id="next-btn" class="btn hidden" onclick="nextQuestion()">Next Question</button>
+            </div>
+        </div>
+
+        <!-- Results Screen -->
+        <div id="results-screen" class="card results-screen hidden">
+            <h2>Quiz Completed!</h2>
+            <p>Here is your final performance:</p>
+            <div id="final-score" class="score-display">0 / 50</div>
+            <p id="result-message">Great effort!</p>
+            <button class="btn" onclick="restartQuiz()">Try Again</button>
+        </div>
+    </main>
+
+    <footer>
+        Prep 3 Science • Term 1 • El-Moasser Curriculum Reference
+    </footer>
+
+    <script>
+        const questions = [
+            {
+                questionNumber: 1,
+                question: "What is defined as the process in which bonds are broken in molecules of reactants, and new bonds are formed in molecules of the products?",
+                answerOptions: [
+                    { text: "A chemical reaction", isCorrect: true, rationale: "A chemical reaction involves breaking existing bonds in reactants and forming new bonds in products." },
+                    { text: "A physical change", isCorrect: false, rationale: "Physical changes do not involve breaking and forming chemical bonds to create new substances." },
+                    { text: "A nuclear reaction", isCorrect: false, rationale: "Nuclear reactions involve changes to atomic nuclei, not molecular bond breaking and forming." },
+                    { text: "A phase transition", isCorrect: false, rationale: "Phase transitions alter physical states without changing chemical composition or breaking molecular bonds." }
+                ],
+                hint: "Think about the foundational definition given at the very start of the lesson regarding reactants and products.",
+                tags: ["definition", "chemical_reaction"]
+            },
+            {
+                questionNumber: 2,
+                question: "Which of the following observations can indicate that a chemical reaction has occurred?",
+                answerOptions: [
+                    { text: "Gas evolution", isCorrect: true, rationale: "Gas evolution is one of the key observable indicators of a chemical reaction." },
+                    { text: "Freezing of liquid water", isCorrect: false, rationale: "Freezing is a physical phase change, not a chemical reaction indicator." },
+                    { text: "Melting of ice cream", isCorrect: false, rationale: "Melting is a physical change without new substance formation." },
+                    { text: "Dissolving sugar in water", isCorrect: false, rationale: "Dissolving forms a physical solution rather than a new chemical product with different properties." }
+                ],
+                hint: "The lesson lists five visual and sensory indications of chemical changes, including colour change, odour emission, gas evolution, precipitate formation, and emission of light and heat.",
+                tags: ["observations", "indicators"]
+            },
+            {
+                questionNumber: 3,
+                question: "How are chemical reactions classified according to how atoms or ions rearrange and bind together?",
+                answerOptions: [
+                    { text: "Four main types", isCorrect: true, rationale: "Chemical reactions are classified into four main types: direct combination, decomposition, single replacement, and double replacement." },
+                    { text: "Two main types", isCorrect: false, rationale: "There are four distinct types listed in the lesson map, not two." },
+                    { text: "Three main types", isCorrect: false, rationale: "The classification comprises four primary categories." },
+                    { text: "Five main types", isCorrect: false, rationale: "Five refers to indicators of chemical reactions, whereas reactions are classified into four types." }
+                ],
+                hint: "Check the main classification chart in Lesson 1 which outlines direct combination, decomposition, single replacement, and double replacement.",
+                tags: ["classification", "reactions"]
+            },
+            {
+                questionNumber: 4,
+                question: "What is a direct combination reaction?",
+                answerOptions: [
+                    { text: "Reactions in which two or more substances combine to form a new compound", isCorrect: true, rationale: "Direct combination involves simpler substances joining together to create a single new compound." },
+                    { text: "Reactions in which a compound breaks down into simpler components", isCorrect: false, rationale: "Breaking down into simpler components describes decomposition reactions." },
+                    { text: "Reactions in which an element replaces another in a compound", isCorrect: false, rationale: "Replacing an element in a compound describes single replacement." },
+                    { text: "Reactions involving exchange between two compounds", isCorrect: false, rationale: "Exchange between two compounds describes double replacement reactions." }
+                ],
+                hint: "Look at the general formula representation A + B -> AB.",
+                tags: ["direct_combination", "definition"]
+            },
+            {
+                questionNumber: 5,
+                question: "When sanded magnesium ribbon is exposed to a Bunsen flame, what is observed?",
+                answerOptions: [
+                    { text: "A bright white flame", isCorrect: true, rationale: "Magnesium ignites rapidly and burns with an intense bright white flame." },
+                    { text: "Bright sparks forming magnetic iron oxide", isCorrect: false, rationale: "Bright sparks and magnetic iron oxide are produced by burning steel wool (iron)." },
+                    { text: "A black layer of copper oxide without visible flame", isCorrect: false, rationale: "Copper wire forms a black layer without a visible flame." },
+                    { text: "A yellowish-orange flame with gas evolution", isCorrect: false, rationale: "A yellowish-orange flame occurs during sodium reacting with water." }
+                ],
+                hint: "Recall the activity involving magnesium ribbon and safety goggles due to intense glare.",
+                tags: ["magnesium", "oxygen", "activity"]
+            },
+            {
+                questionNumber: 6,
+                question: "What white substance is formed upon the complete reaction of magnesium ribbon with oxygen?",
+                answerOptions: [
+                    { text: "Magnesium oxide", isCorrect: true, rationale: "Burning magnesium in oxygen produces a white solid powder of magnesium oxide ($MgO$)." },
+                    { text: "Magnetic iron oxide", isCorrect: false, rationale: "Magnetic iron oxide ($Fe_{3}O_{4}$) is produced when iron burns." },
+                    { text: "Copper oxide", isCorrect: false, rationale: "Copper oxide ($CuO$) is black in colour and formed from copper." },
+                    { text: "Sodium hydroxide", isCorrect: false, rationale: "Sodium hydroxide is formed when sodium reacts with water." }
+                ],
+                hint: "The formula is $MgO$, formed by combining Mg and O.",
+                tags: ["magnesium_oxide", "products"]
+            },
+            {
+                questionNumber: 7,
+                question: "What is the correct balanced chemical equation for the reaction of magnesium with oxygen?",
+                answerOptions: [
+                    { text: "$2Mg_{(s)} + O_{2(g)} \\xrightarrow{\\Delta} 2MgO_{(s)}$", isCorrect: true, rationale: "Two moles of magnesium react with one mole of oxygen gas upon heating to produce two moles of magnesium oxide." },
+                    { text: "$Mg_{(s)} + O_{2(g)} \\xrightarrow{\\Delta} MgO_{2(s)}$", isCorrect: false, rationale: "Magnesium oxide has the formula $MgO$, requiring balancing as $2Mg + O_{2} \\rightarrow 2MgO$." },
+                    { text: "$3Fe_{(s)} + 2O_{2(g)} \\xrightarrow{\\Delta} Fe_{3}O_{4(s)}$", isCorrect: false, rationale: "This equation correctly represents the reaction of iron with oxygen, not magnesium." },
+                    { text: "$2Cu_{(s)} + O_{2(g)} \\xrightarrow{\\Delta} 2CuO_{(s)}$", isCorrect: false, rationale: "This equation represents the reaction of copper with oxygen." }
+                ],
+                hint: "Make sure the valencies balance out: Mg is divalent and O is divalent.",
+                tags: ["equations", "magnesium"]
+            },
+            {
+                questionNumber: 8,
+                question: "What product is mainly produced when a piece of steel wool (iron wire) burns in oxygen?",
+                answerOptions: [
+                    { text: "Magnetic iron oxide", isCorrect: true, rationale: "Steel wool burns with bright sparks and produces magnetic iron oxide ($Fe_{3}O_{4}$)." },
+                    { text: "Magnesium oxide", isCorrect: false, rationale: "Magnesium oxide is produced by magnesium ribbon." },
+                    { text: "Copper oxide", isCorrect: false, rationale: "Copper oxide is produced by copper." },
+                    { text: "Red mercury oxide", isCorrect: false, rationale: "Red mercury oxide is a reactant used in thermal decomposition." }
+                ],
+                hint: "Notice the formula subscript 3 and 4 in $Fe_{3}O_{4}$.",
+                tags: ["iron", "oxygen", "products"]
+            },
+            {
+                questionNumber: 9,
+                question: "What is observed when a copper wire is heated in a Bunsen flame?",
+                answerOptions: [
+                    { text: "A black layer of copper oxide is formed on its surface", isCorrect: true, rationale: "Copper wire does not burn with a visible flame; instead, a black layer of copper oxide ($CuO$) forms." },
+                    { text: "It burns with a bright white flame", isCorrect: false, rationale: "A bright white flame is characteristic of magnesium." },
+                    { text: "It produces bright sparks", isCorrect: false, rationale: "Bright sparks are produced by iron steel wool." },
+                    { text: "It dissolves instantly with effervescence", isCorrect: false, rationale: "Copper does not react with dilute acids or dissolve like reactive metals." }
+                ],
+                hint: "Copper doesn't show a bright flame, but its surface colour changes to black.",
+                tags: ["copper", "oxygen"]
+            },
+            {
+                questionNumber: 10,
+                question: "Why must safety goggles be worn when burning a magnesium ribbon?",
+                answerOptions: [
+                    { text: "To protect against highly intense light and ultraviolet radiation that may damage the retina", isCorrect: true, rationale: "Burning magnesium produces an extremely bright glare and UV radiation harmful to eyes." },
+                    { text: "To prevent splashes of hydrochloric acid", isCorrect: false, rationale: "Acid splashes are a hazard in acid-metal reactions, whereas magnesium burning involves intense glare." },
+                    { text: "To protect against flying glass from test tubes", isCorrect: false, rationale: "Metal tongs are used with burners, not sealed test tubes." },
+                    { text: "To avoid breathing toxic chlorine gas", isCorrect: false, rationale: "No chlorine gas is produced when burning magnesium in air." }
+                ],
+                hint: "Look at the safety precautions box regarding avoiding staring at the glare.",
+                tags: ["safety", "magnesium"]
+            },
+            {
+                questionNumber: 11,
+                question: "Decomposition reactions are described as being the reverse of which type of reactions?",
+                answerOptions: [
+                    { text: "Direct combination reactions", isCorrect: true, rationale: "Decomposition reactions break compounds down into simpler components, which is the exact reverse of combining substances." },
+                    { text: "Single replacement reactions", isCorrect: false, rationale: "Single replacement involves an element replacing another in a compound." },
+                    { text: "Double replacement reactions", isCorrect: false, rationale: "Double replacement involves ion exchange between two compounds." },
+                    { text: "Neutralization reactions", isCorrect: false, rationale: "Neutralization is an acid-base reaction forming salt and water." }
+                ],
+                hint: "Direct combination builds compounds up (A + B -> AB), while decomposition breaks them down (AB -> A + B).",
+                tags: ["decomposition", "classification"]
+            },
+            {
+                questionNumber: 12,
+                question: "What happens when red mercury oxide is heated?",
+                answerOptions: [
+                    { text: "It decomposes into silver-coloured mercury and evolves oxygen gas", isCorrect: true, rationale: "Red mercury oxide ($HgO$) undergoes thermal decomposition into liquid silver mercury and oxygen gas." },
+                    { text: "It combines with oxygen to form white powder", isCorrect: false, rationale: "That describes magnesium combination, not mercury oxide heating." },
+                    { text: "It turns into carbon dioxide and calcium oxide", isCorrect: false, rationale: "That describes calcium carbonate thermal decomposition." },
+                    { text: "It forms a black copper oxide layer", isCorrect: false, rationale: "Black copper oxide is formed from heated copper." }
+                ],
+                hint: "Red solid mercury oxide yields a silver liquid metal and a gas that increases matchstick glow.",
+                tags: ["mercury_oxide", "decomposition"]
+            },
+            {
+                questionNumber: 13,
+                question: "How can you experimentally test for the oxygen gas evolved during the thermal decomposition of red mercury oxide?",
+                answerOptions: [
+                    { text: "It increases the glow of a lighted matchstick", isCorrect: true, rationale: "Oxygen gas supports combustion and intensifies the glow of a lighted matchstick." },
+                    { text: "It burns with a pop sound", isCorrect: false, rationale: "Hydrogen gas burns with a pop sound." },
+                    { text: "It turns clear limewater turbid", isCorrect: false, rationale: "Carbon dioxide turns limewater turbid." },
+                    { text: "It forms a yellowish-orange flame", isCorrect: false, rationale: "Sodium reacting with water produces a yellowish-orange flame." }
+                ],
+                hint: "Oxygen is a supporter of combustion.",
+                tags: ["oxygen_test", "decomposition"]
+            },
+            {
+                questionNumber: 14,
+                question: "What is the balanced symbolic equation for the thermal decomposition of red mercury oxide?",
+                answerOptions: [
+                    { text: "$2HgO_{(s)} \\xrightarrow{\\Delta} 2Hg_{(l)} + O_{2(g)}$", isCorrect: true, rationale: "Two moles of red mercury oxide decompose upon heating into two moles of liquid mercury and one mole of oxygen gas." },
+                    { text: "$HgO_{(s)} \\xrightarrow{\\Delta} Hg_{(s)} + O_{(g)}$", isCorrect: false, rationale: "Oxygen gas exists as diatomic molecules ($O_{2}$), and the equation must be balanced." },
+                    { text: "$CaCO_{3(s)} \\xrightarrow{\\Delta} CaO_{(s)} + CO_{2(g)}$", isCorrect: false, rationale: "This equation represents calcium carbonate decomposition." },
+                    { text: "$Cu_{(s)} + O_{2(g)} \\xrightarrow{\\Delta} 2CuO_{(s)}$", isCorrect: false, rationale: "This represents copper combining with oxygen." }
+                ],
+                hint: "Mercury in this product state is a silver-coloured liquid denoted as $(l)$ or $(0)$ in the textbook illustration.",
+                tags: ["equations", "mercury_oxide"]
+            },
+            {
+                questionNumber: 15,
+                question: "What are the products formed when metal carbonates undergo thermal decomposition?",
+                answerOptions: [
+                    { text: "Metal oxide and carbon dioxide gas", isCorrect: true, rationale: "Metal carbonates decompose on heating to yield metal oxide and evolve carbon dioxide gas." },
+                    { text: "Metal and oxygen gas", isCorrect: false, rationale: "Metal and oxygen gas are produced during metal oxide decomposition." },
+                    { text: "Metal chloride and hydrogen gas", isCorrect: false, rationale: "Metal chloride and hydrogen gas are formed when reactive metals react with dilute acids." },
+                    { text: "Metal hydroxide and hydrogen gas", isCorrect: false, rationale: "Metal hydroxide and hydrogen are formed when reactive metals react with water." }
+                ],
+                hint: "Think about calcium carbonate ($CaCO_{3}$) heating into calcium oxide and carbon dioxide.",
+                tags: ["metal_carbonates", "decomposition"]
+            },
+            {
+                questionNumber: 16,
+                question: "What is observed when carbon dioxide gas is passed through clear limewater for a short period of time?",
+                answerOptions: [
+                    { text: "It turns turbid (milky)", isCorrect: true, rationale: "Carbon dioxide gas reacts with limewater to form insoluble calcium carbonate, causing turbidity." },
+                    { text: "It turns violet", isCorrect: false, rationale: "Universal indicator turns violet in strong alkali solutions." },
+                    { text: "It burns with a pop sound", isCorrect: false, rationale: "Hydrogen gas burns with a pop sound." },
+                    { text: "It forms a black precipitate", isCorrect: false, rationale: "Limewater turns milky/turbid, not black." }
+                ],
+                hint: "This is a classic chemical test for carbon dioxide ($CO_{2}$).",
+                tags: ["carbon_dioxide", "limewater"]
+            },
+            {
+                questionNumber: 17,
+                question: "What is the balanced symbolic equation for the thermal decomposition of calcium carbonate?",
+                answerOptions: [
+                    { text: "$CaCO_{3(s)} \\xrightarrow{\\Delta} CaO_{(s)} + CO_{2(g)}$", isCorrect: true, rationale: "Calcium carbonate decomposes on heating into calcium oxide solid and carbon dioxide gas." },
+                    { text: "$Ca(OH)_{2} + CO_{2} \\rightarrow CaCO_{3} + H_{2}O$", isCorrect: false, rationale: "This is the reaction of limewater with carbon dioxide, not thermal decomposition of calcium carbonate." },
+                    { text: "$2HgO_{(s)} \\xrightarrow{\\Delta} 2Hg_{(l)} + O_{2(g)}$", isCorrect: false, rationale: "This represents mercury oxide decomposition." },
+                    { text: "$Mg_{(s)} + 2HCl_{(aq)} \\xrightarrow{dil.} MgCl_{2(aq)} + H_{2(g)}$", isCorrect: false, rationale: "This represents magnesium reacting with dilute hydrochloric acid." }
+                ],
+                hint: "Reactant is limestone/calcium carbonate; products are quicklime ($CaO$) and $CO_{2}$ gas.",
+                tags: ["equations", "calcium_carbonate"]
+            },
+            {
+                questionNumber: 18,
+                question: "What is a single replacement reaction?",
+                answerOptions: [
+                    { text: "Reactions in which an element replaces another element in one of its compounds", isCorrect: true, rationale: "In single replacement, a more reactive element displaces a less reactive element from its compound." },
+                    { text: "Reactions in which two substances combine to form a compound", isCorrect: false, rationale: "Combining substances defines direct combination." },
+                    { text: "Reactions in which compounds decompose into simpler components", isCorrect: false, rationale: "Decomposing into simpler components defines decomposition." },
+                    { text: "Reactions involving exchange of ions between two compounds", isCorrect: false, rationale: "Ion exchange between two compounds defines double replacement." }
+                ],
+                hint: "Look at the general scheme: A + BC -> AC + B.",
+                tags: ["single_replacement", "definition"]
+            },
+            {
+                questionNumber: 19,
+                question: "Into how many sub-categories are single replacement reactions classified in the lesson?",
+                answerOptions: [
+                    { text: "Three", isCorrect: true, rationale: "Single replacement reactions are classified into replacement of hydrogen in acid by a metal, replacement of hydrogen in water by a metal, and replacement of a metal by another in its salt solution." },
+                    { text: "Two", isCorrect: false, rationale: "There are three distinct sub-categories." },
+                    { text: "Four", isCorrect: false, rationale: "Four is the number of main chemical reaction types overall." },
+                    { text: "Five", isCorrect: false, rationale: "Five refers to reaction indicators." }
+                ],
+                hint: "Check the tree diagram under 'Single replacement reactions' on page 16.",
+                tags: ["single_replacement", "classification"]
+            },
+            {
+                questionNumber: 20,
+                question: "When magnesium, zinc, and iron are added to dilute hydrochloric acid, what gas is evolved?",
+                answerOptions: [
+                    { text: "Hydrogen gas", isCorrect: true, rationale: "Metals preceding hydrogen in the chemical reactivity series react with dilute acids to evolve hydrogen gas." },
+                    { text: "Oxygen gas", isCorrect: false, rationale: "Oxygen gas is evolved during metal oxide decomposition." },
+                    { text: "Carbon dioxide gas", isCorrect: false, rationale: "Carbon dioxide is evolved during metal carbonate thermal decomposition." },
+                    { text: "Chlorine gas", isCorrect: false, rationale: "Chlorine gas is not evolved; metal chlorides remain in solution." }
+                ],
+                hint: "The gas tests with a lighted splint producing a pop sound.",
+                tags: ["acids", "hydrogen_gas"]
+            },
+            {
+                questionNumber: 21,
+                question: "How can you test for the hydrogen gas evolved when metals react with dilute acids?",
+                answerOptions: [
+                    { text: "It burns with a pop sound when a lighted splint is brought close", isCorrect: true, rationale: "Hydrogen gas is flammable and burns distinctively with a pop sound." },
+                    { text: "It increases the glow of a lighted matchstick", isCorrect: false, rationale: "Oxygen increases the glow of a lighted matchstick." },
+                    { text: "It turns clear limewater turbid", isCorrect: false, rationale: "Carbon dioxide turns limewater turbid." },
+                    { text: "It forms a violet colour with universal indicator", isCorrect: false, rationale: "Universal indicator tests solution pH, not gases." }
+                ],
+                hint: "Think about the pop sound test shown in the figures.",
+                tags: ["hydrogen_test", "acids"]
+            },
+            {
+                questionNumber: 22,
+                question: "How are magnesium, zinc, and iron arranged in terms of the rate of hydrogen gas bubble evolution in dilute hydrochloric acid descendingly?",
+                answerOptions: [
+                    { text: "Magnesium > Zinc > Iron", isCorrect: true, rationale: "Magnesium reacts most rapidly and instantly, followed by zinc, then iron." },
+                    { text: "Iron > Zinc > Magnesium", isCorrect: false, rationale: "Iron is less reactive than zinc and magnesium." },
+                    { text: "Zinc > Magnesium > Iron", isCorrect: false, rationale: "Magnesium is more reactive than zinc." },
+                    { text: "Copper > Iron > Zinc", isCorrect: false, rationale: "Copper does not react with dilute acids at all." }
+                ],
+                hint: "Magnesium is the most reactive among these three metals, reacting rapidly and instantly.",
+                tags: ["reactivity", "acids"]
+            },
+            {
+                questionNumber: 23,
+                question: "Why does copper not react with dilute hydrochloric acid?",
+                answerOptions: [
+                    { text: "Because copper follows hydrogen in the chemical reactivity series; since it is less reactive, it cannot replace hydrogen", isCorrect: true, rationale: "Metals located after hydrogen in the reactivity series do not displace hydrogen from dilute acids." },
+                    { text: "Because copper forms a protective oxide layer instantly", isCorrect: false, rationale: "Aluminum forms an oxide layer, but copper's inertness with acids is due to its position below hydrogen." },
+                    { text: "Because copper is a non-metal", isCorrect: false, rationale: "Copper is a transition metal." },
+                    { text: "Because copper is too reactive and causes an explosion", isCorrect: false, rationale: "Sodium is extremely reactive, not copper." }
+                ],
+                hint: "Check the position of copper relative to hydrogen on the reactivity series chart.",
+                tags: ["copper", "reactivity_series"]
+            },
+            {
+                questionNumber: 24,
+                question: "What is the balanced equation for the reaction of magnesium with dilute hydrochloric acid?",
+                answerOptions: [
+                    { text: "$Mg_{(s)} + 2HCl_{(aq)} \\xrightarrow{dil.} MgCl_{2(aq)} + H_{2(g)}$", isCorrect: true, rationale: "One atom of magnesium displaces two hydrogen atoms from hydrochloric acid to form magnesium chloride and hydrogen gas." },
+                    { text: "$Mg_{(s)} + HCl_{(aq)} \\xrightarrow{dil.} MgCl_{(aq)} + H_{(g)}$", isCorrect: false, rationale: "Magnesium has a valency of 2, forming $MgCl_{2}$, and hydrogen exists as $H_{2}$." },
+                    { text: "$Zn_{(s)} + 2HCl_{(aq)} \\xrightarrow{dil.} ZnCl_{2(aq)} + H_{2(g)}$", isCorrect: false, rationale: "This represents zinc reacting with hydrochloric acid." },
+                    { text: "$Fe_{(s)} + 2HCl_{(aq)} \\xrightarrow{dil.} FeCl_{2(aq)} + H_{2(g)}$", isCorrect: false, rationale: "This represents iron reacting with hydrochloric acid." }
+                ],
+                hint: "Magnesium chloride is $MgCl_{2}$ and hydrogen gas is $H_{2}$." ,
+                tags: ["equations", "magnesium_acid"]
+            },
+            {
+                questionNumber: 25,
+                question: "Why does aluminum (Al), despite preceding zinc in the chemical reactivity series, initially seem not to react instantly with dilute acids?",
+                answerOptions: [
+                    { text: "Because aluminum forms a layer of aluminum oxide ($Al_{2}O_{3}$) on its surface that acts as an isolating layer", isCorrect: true, rationale: "The oxide coating must first corrode or dissolve before the underlying aluminum reacts with the acid." },
+                    { text: "Because aluminum is less reactive than hydrogen", isCorrect: false, rationale: "Aluminum is highly reactive and precedes hydrogen in the series." },
+                    { text: "Because aluminum is a liquid at room temperature", isCorrect: false, rationale: "Aluminum is a solid metal." },
+                    { text: "Because aluminum reacts to form water instead of hydrogen", isCorrect: false, rationale: "Aluminum reacts with acids to produce hydrogen gas once the surface oxide layer dissolves." }
+                ],
+                hint: "Look at the 'Enrichment information' box on page 8 regarding aluminum oxide.",
+                tags: ["aluminum", "enrichment"]
+            },
+            {
+                questionNumber: 26,
+                question: "What is the chemical reactivity series?",
+                answerOptions: [
+                    { text: "The arrangement of metal elements in a descending order according to their chemical reactivity", isCorrect: true, rationale: "The reactivity series ranks metals from most reactive at the top to least reactive at the bottom." },
+                    { text: "The arrangement of non-metals in ascending order of atomic number", isCorrect: false, rationale: "The reactivity series specifically ranks metal elements by chemical reactivity." },
+                    { text: "The classification of chemical bonds into four types", isCorrect: false, rationale: "Bond classification is separate from the metal reactivity series." },
+                    { text: "The scale of pH values from 0 to 14", isCorrect: false, rationale: "The pH scale measures solution acidity and alkalinity." }
+                ],
+                hint: "Review the definition box for 'Chemical reactivity series' on page 19.",
+                tags: ["reactivity_series", "definition"]
+            },
+            {
+                questionNumber: 27,
+                question: "Which metal is positioned at the very top (most reactive) of the chemical reactivity series given in the lesson?",
+                answerOptions: [
+                    { text: "Potassium (K)", isCorrect: true, rationale: "Potassium is listed at the top of the chemical reactivity series as the most reactive metal." },
+                    { text: "Sodium (Na)", isCorrect: false, rationale: "Sodium is immediately below potassium." },
+                    { text: "Magnesium (Mg)", isCorrect: false, rationale: "Magnesium is moderately-high in the series." },
+                    { text: "Gold (Au)", isCorrect: false, rationale: "Gold is at the bottom as an inactive element." }
+                ],
+                hint: "Check the table on page 19 starting with K.",
+                tags: ["potassium", "reactivity_series"]
+            },
+            {
+                questionNumber: 28,
+                question: "Which metal serves as the reference point for comparison in the middle of the chemical reactivity series?",
+                answerOptions: [
+                    { text: "Hydrogen (H)", isCorrect: true, rationale: "Hydrogen is placed in the reactivity series as the reference point separating metals that react with acids from those that do not." },
+                    { text: "Copper (Cu)", isCorrect: false, rationale: "Copper is below hydrogen." },
+                    { text: "Iron (Fe)", isCorrect: false, rationale: "Iron is above hydrogen." },
+                    { text: "Zinc (Zn)", isCorrect: false, rationale: "Zinc is above hydrogen." }
+                ],
+                hint: "It is a non-metal element used to divide reactive metals from unreactive ones regarding dilute acids.",
+                tags: ["hydrogen", "reactivity_series"]
+            },
+            {
+                questionNumber: 29,
+                question: "Which of the following elements are classified as 'Inactive elements' (least reactive) at the bottom of the reactivity series?",
+                answerOptions: [
+                    { text: "Platinum and Gold", isCorrect: true, rationale: "Platinum (Pt) and Gold (Au) are inactive elements located at the bottom of the reactivity series." },
+                    { text: "Potassium and Sodium", isCorrect: false, rationale: "Potassium and sodium are most reactive." },
+                    { text: "Magnesium and Aluminum", isCorrect: false, rationale: "Magnesium and aluminum react with acids and water." },
+                    { text: "Zinc and Iron", isCorrect: false, rationale: "Zinc and iron are moderately reactive metals." }
+                ],
+                hint: "Think of precious metals used in jewelry that do not tarnish or react easily.",
+                tags: ["gold", "platinum", "reactivity_series"]
+            },
+            {
+                questionNumber: 30,
+                question: "How do highly reactive metals like sodium and potassium react with cold water?",
+                answerOptions: [
+                    { text: "React instantly and vigorously (violently), forming an alkaline solution and evolving hydrogen that ignites", isCorrect: true, rationale: "Sodium reacts violently with cold water, producing sodium hydroxide and hydrogen gas which ignites with a yellowish-orange flame." },
+                    { text: "Do not react with cold water at all", isCorrect: false, rationale: "Highly reactive metals react instantly with cold water." },
+                    { text: "React slowly only when water is boiling", isCorrect: false, rationale: "Magnesium requires hot water, but sodium reacts with cold water instantly." },
+                    { text: "Decompose into metal oxides and carbon dioxide", isCorrect: false, rationale: "That describes carbonate thermal decomposition." }
+                ],
+                hint: "Sodium floats on water and moves rapidly with a yellowish-orange flame.",
+                tags: ["sodium", "water_reaction"]
+            },
+            {
+                questionNumber: 31,
+                question: "What is the balanced equation for the reaction of sodium with water?",
+                answerOptions: [
+                    { text: "$2Na_{(s)} + 2H_{2}O_{(l)} \\rightarrow 2NaOH_{(aq)} + H_{2(g)} + \\text{Heat}$", isCorrect: true, rationale: "Sodium reacts with water to produce aqueous sodium hydroxide, hydrogen gas, and heat." },
+                    { text: "$Na_{(s)} + H_{2}O_{(l)} \\rightarrow NaOH_{(aq)} + H_{(g)}$", isCorrect: false, rationale: "Hydrogen gas is diatomic ($H_{2}$) and the equation must be balanced properly." },
+                    { text: "$Mg_{(s)} + H_{2}O_{(l)} \\rightarrow MgO_{(s)} + H_{2(g)}$", isCorrect: false, rationale: "Magnesium reacts with hot water, not cold water like sodium." },
+                    { text: "$Cu_{(s)} + H_{2}O_{(l)} \\rightarrow \\text{No reaction}$", isCorrect: false, rationale: "Copper does not react with water." }
+                ],
+                hint: "Product includes sodium hydroxide ($NaOH$) and hydrogen gas ($H_{2}$).",
+                tags: ["equations", "sodium"]
+            },
+            {
+                questionNumber: 32,
+                question: "Why does sodium float on the surface of water during its reaction?",
+                answerOptions: [
+                    { text: "Because its density is lower than that of water", isCorrect: true, rationale: "Sodium metal has a lower density than water, causing it to float." },
+                    { text: "Because hydrogen gas bubbles lift it up", isCorrect: false, rationale: "It floats initially due to lower density before moving rapidly." },
+                    { text: "Because sodium is insoluble in water", isCorrect: false, rationale: "Insolubility does not inherently cause floating without lower density." },
+                    { text: "Because of the high heat of the reaction", isCorrect: false, rationale: "Heat is a result of the reaction, not the cause of floating." }
+                ],
+                hint: "Check the 'G.R.?' box on page 20 regarding sodium density.",
+                tags: ["sodium", "density"]
+            },
+            {
+                questionNumber: 33,
+                question: "Why must sodium fires never be extinguished with water?",
+                answerOptions: [
+                    { text: "Because the reaction releases a large amount of heat that may ignite the evolved hydrogen or cause an explosion", isCorrect: true, rationale: "Adding water to sodium intensifies the exothermic reaction and releases more flammable hydrogen gas, causing explosions." },
+                    $ { text: "Because water turns acidic and neutralizes sodium", isCorrect: false, rationale: "Sodium forms an alkaline solution, not acidic." },
+                    { text: "Because water freezes upon contact with sodium", isCorrect: false, rationale: "Sodium reactions generate heat, melting nothing." },
+                    { text: "Because sodium dissolves without reacting in water", isCorrect: false, rationale: "Sodium reacts violently with water." }
+                ],
+                hint: "Look at safety precautions on page 21 regarding sodium fires and dry sand.",
+                tags: ["safety", "sodium_fire"]
+            },
+            {
+                questionNumber: 34,
+                question: "What substance is kept in school laboratories to extinguish metal fires such as sodium fires?",
+                answerOptions: [
+                    { text: "Dry sand", isCorrect: true, rationale: "A bucket filled with dry sand is kept to smother and extinguish metal fires where water cannot be used." },
+                    { text: "Dilute hydrochloric acid", isCorrect: false, rationale: "Acid would react violently with sodium." },
+                    { text: "Limewater", isCorrect: false, rationale: "Limewater is aqueous and contains water." },
+                    { text: "Copper sulphate solution", isCorrect: false, rationale: "Copper sulphate solution contains water." }
+                ],
+                hint: "Sand smothers the fire without reacting chemically with the metal.",
+                tags: ["safety", "dry_sand"]
+            },
+            {
+                questionNumber: 35,
+                question: "How does magnesium react with cold water versus hot water?",
+                answerOptions: [
+                    { text: "No bubbles evolve with cold water, but gas bubbles evolve when placed in hot water", isCorrect: true, rationale: "Magnesium is less chemically reactive than sodium and only reacts with hot water, not cold water." },
+                    { text: "Reacts instantly and vigorously with cold water", isCorrect: false, rationale: "Instant vigorous reaction with cold water is characteristic of sodium and potassium." },
+                    { text: "Reacts with neither cold nor hot water", isCorrect: false, rationale: "Magnesium reacts slowly with hot water." },
+                    { text: "Explodes in cold water", isCorrect: false, rationale: "Magnesium does not react with cold water." }
+                ],
+                hint: "Check observations in the water reaction activity on page 20.",
+                tags: ["magnesium", "water_reaction"]
+            },
+            {
+                questionNumber: 36,
+                question: "What is observed when a zinc rod is immersed in a blue copper sulphate solution ($CuSO_{4}$)?",
+                answerOptions: [
+                    { text: "The blue colour of the solution gradually disappears and a red layer is formed on the zinc rod", isCorrect: true, rationale: "Zinc replaces copper in copper sulphate, forming colourless zinc sulphate and depositing red copper metal." },
+                    { text: "The solution turns dark violet and no solid forms", isCorrect: false, rationale: "The blue solution fades to colourless as zinc sulphate forms." },
+                    { text: "A black layer of copper oxide forms", isCorrect: false, rationale: "Copper oxide forms when copper is heated in oxygen." },
+                    { text: "Hydrogen gas bubbles evolve rapidly with a pop sound", isCorrect: false, rationale: "This is a salt solution replacement reaction, not an acid reaction producing hydrogen gas." }
+                ],
+                hint: "Zinc is more reactive than copper, so it displaces copper from its salt solution.",
+                tags: ["zinc", "copper_sulphate", "salt_solution"]
+            },
+            {
+                questionNumber: 37,
+                question: "What is the balanced equation for the reaction of zinc with copper sulphate solution?",
+                answerOptions: [
+                    { text: "$Zn_{(s)} + CuSO_{4(aq)} \\rightarrow ZnSO_{4(aq)} + Cu_{(s)}$", isCorrect: true, rationale: "Zinc displaces copper to form aqueous zinc sulphate (colourless) and solid copper (red)." },
+                    { text: "$Cu_{(s)} + ZnSO_{4(aq)} \\rightarrow CuSO_{4(aq)} + Zn_{(s)}$", isCorrect: false, rationale: "Copper cannot replace zinc because copper is less reactive than zinc." },
+                    { text: "$Zn_{(s)} + H_{2}SO_{4(aq)} \\rightarrow ZnSO_{4(aq)} + H_{2(g)}$", isCorrect: false, rationale: "This represents zinc reacting with sulphuric acid." },
+                    { text: "$2Zn_{(s)} + O_{2(g)} \\rightarrow 2ZnO_{(s)}$", isCorrect: false, rationale: "This represents zinc combining with oxygen." }
+                ],
+                hint: "Products are zinc sulphate solution and copper solid.",
+                tags: ["equations", "zinc_copper_sulphate"]
+            },
+            {
+                questionNumber: 38,
+                question: "Why does iron replace copper in its salt solutions, while the reverse does not occur?",
+                answerOptions: [
+                    { text: "Because iron precedes copper in the chemical reactivity series and is more reactive than it", isCorrect: true, rationale: "A more reactive metal (iron) replaces a less reactive metal (copper) from its salt solution." },
+                    { text: "Because iron is a liquid and copper is a solid", isCorrect: false, rationale: "Both iron and copper are solid metals." },
+                    { text: "Because copper forms an oxide layer", isCorrect: false, rationale: "Displacement depends on reactivity series position, not oxide layers." },
+                    { text: "Because iron is less reactive than copper", isCorrect: false, rationale: "Iron is more reactive than copper." }
+                ],
+                hint: "Check Q2 on page 11 regarding iron and copper salt solutions.",
+                tags: ["iron", "copper", "reactivity"]
+            },
+            {
+                questionNumber: 39,
+                question: "Why must silver nitrate solution not be stored in aluminum containers?",
+                answerOptions: [
+                    { text: "Because aluminum precedes silver in the reactivity series, so it replaces silver and causes the aluminum containers to be corroded", isCorrect: true, rationale: "Aluminum is more reactive than silver and will displace silver from silver nitrate, dissolving and corroding the container." },
+                    { text: "Because silver nitrate reacts with light to form mercury", isCorrect: false, rationale: "Mercury comes from mercury oxide decomposition." },
+                    { text: "Because aluminum reacts with silver nitrate to produce hydrogen gas explosions", isCorrect: false, rationale: "No hydrogen gas is evolved in this metal-salt displacement reaction." },
+                    { text: "Because silver nitrate is a strong alkali", isCorrect: false, rationale: "Silver nitrate is a salt solution, not an alkali." }
+                ],
+                hint: "Check Q3 on page 11 regarding aluminum and silver nitrate.",
+                tags: ["aluminum", "silver_nitrate", "containers"]
+            },
+            {
+                questionNumber: 40,
+                question: "What happens when silverware and silver utensils lose their luster over time?",
+                answerOptions: [
+                    { text: "A black layer of silver sulphide is formed on them due to their reaction with atmospheric air", isCorrect: true, rationale: "Silver reacts with sulphur compounds in the air to form a tarnished black layer of silver sulphide." },
+                    { text: "A white layer of magnesium oxide is formed", isCorrect: false, rationale: "Magnesium oxide is formed from burning magnesium." },
+                    { text: "A black layer of copper oxide is formed", isCorrect: false, rationale: "Copper oxide is formed from heated copper." },
+                    { text: "They react with water to form sodium hydroxide", isCorrect: false, rationale: "Sodium is unrelated to silverware." }
+                ],
+                hint: "Look at 'Life application | Restoring the luster of silver' on page 12.",
+                tags: ["silver", "tarnish", "life_application"]
+            },
+            {
+                questionNumber: 41,
+                question: "How can the luster of tarnished silverware be restored using a single replacement reaction?",
+                answerOptions: [
+                    { text: "By placing it in boiling water with sodium bicarbonate salt and a piece of aluminum foil", isCorrect: true, rationale: "Aluminum replaces silver in the tarnish compound in a hot sodium bicarbonate bath, restoring the silver's luster." },
+                    { text: "By adding dilute hydrochloric acid and zinc", isCorrect: false, rationale: "Hydrochloric acid and zinc would react with the silverware inappropriately." },
+                    { text: "By heating it strongly in a Bunsen flame until red mercury oxide forms", isCorrect: false, rationale: "Heating silverware strongly does not clean tarnish." },
+                    { text: "By submerging it in cold water with sodium metal", isCorrect: false, rationale: "Sodium reacts violently with water and is dangerous." }
+                ],
+                hint: "Requires boiling water, baking soda (sodium bicarbonate), and aluminum foil.",
+                tags: ["silver_cleaning", "life_application"]
+            },
+            {
+                questionNumber: 42,
+                question: "What is a neutralization reaction?",
+                answerOptions: [
+                    { text: "The reaction of an acid with an alkali to form a salt and water", isCorrect: true, rationale: "Neutralization is defined as the chemical reaction between an acid and an alkali producing salt and water." },
+                    { text: "The reaction of a metal with oxygen to form metal oxide", isCorrect: false, rationale: "Metal and oxygen form a direct combination metal oxide reaction." },
+                    { text: "The reaction of a metal with dilute acid to evolve hydrogen", isCorrect: false, rationale: "Metal and acid produce salt and hydrogen gas." },
+                    { text: "The thermal decomposition of metal carbonates", isCorrect: false, rationale: "Thermal decomposition produces metal oxide and carbon dioxide." }
+                ],
+                hint: "Look at the definition box on page 14 for Neutralization reaction.",
+                tags: ["neutralization", "definition"]
+            },
+            {
+                questionNumber: 43,
+                question: "What colour does the universal indicator turn in a strong acid solution like hydrochloric acid ($HCl$)?",
+                answerOptions: [
+                    { text: "Red", isCorrect: true, rationale: "Universal indicator turns red in strongly acidic solutions." },
+                    { text: "Green", isCorrect: false, rationale: "Green indicates a neutral solution." },
+                    { text: "Violet", isCorrect: false, rationale: "Violet indicates a strong alkali solution." },
+                    { text: "Yellow", isCorrect: false, rationale: "Strong acid produces a red colour." }
+                ],
+                hint: "Check the cumulative knowledge table on page 14 matching strong acid to colour.",
+                tags: ["universal_indicator", "acids"]
+            },
+            {
+                questionNumber: 44,
+                question: "What colour does the universal indicator turn in a neutral solution like sodium chloride ($NaCl$)?",
+                answerOptions: [
+                    { text: "Green", isCorrect: true, rationale: "Universal indicator is green in neutral solutions where pH is 7." },
+                    { text: "Red", isCorrect: false, rationale: "Red indicates strong acidity." },
+                    { text: "Violet", isCorrect: false, rationale: "Violet indicates strong alkalinity." },
+                    { text: "Blue", isCorrect: false, rationale: "Neutral is represented by green." }
+                ],
+                hint: "Neutral solutions sit in the middle of the pH scale (pH 7).",
+                tags: ["universal_indicator", "neutral"]
+            },
+            {
+                questionNumber: 45,
+                question: "What colour does the universal indicator turn in a strong alkali solution like sodium hydroxide ($NaOH$)?",
+                answerOptions: [
+                    { text: "Violet", isCorrect: true, rationale: "Universal indicator turns violet in strong alkaline solutions." },
+                    { text: "Red", isCorrect: false, rationale: "Red is for acids." },
+                    { text: "Green", isCorrect: false, rationale: "Green is for neutral solutions." },
+                    { text: "Orange", isCorrect: false, rationale: "Orange is not the strong alkali indicator colour here." }
+                ],
+                hint: "Check the right end of the pH and indicator table on page 14.",
+                tags: ["universal_indicator", "alkali"]
+            },
+            {
+                questionNumber: 46,
+                question: "In the activity where dilute hydrochloric acid is added gradually to sodium hydroxide solution containing universal indicator, what is the final observed colour when neutralization is complete?",
+                answerOptions: [
+                    { text: "Green", isCorrect: true, rationale: "As acid neutralizes alkali, the violet solution changes gradually until it becomes green at the neutral point." },
+                    { text: "Red", isCorrect: false, rationale: "Red occurs if excess acid is added past the neutral point." },
+                    { text: "Blue", isCorrect: false, rationale: "The final neutral solution colour is green." },
+                    { text: "Colourless", isCorrect: false, rationale: "Universal indicator imparts distinct colours rather than complete colourlessness."  }
+                ],
+                hint: "The initial violet alkali turns green as acid neutralizes it.",
+                tags: ["neutralization", "activity"]
+            },
+            {
+                questionNumber: 47,
+                question: "Which of the following metals will NOT react with dilute hydrochloric acid to evolve hydrogen gas?",
+                answerOptions: [
+                    { text: "Copper", isCorrect: true, rationale: "Copper follows hydrogen in the chemical reactivity series and cannot replace hydrogen from dilute acids." },
+                    { text: "Magnesium", isCorrect: false, rationale: "Magnesium reacts rapidly and instantly with dilute hydrochloric acid." },
+                    { text: "Zinc", isCorrect: false, rationale: "Zinc reacts with dilute hydrochloric acid to evolve hydrogen gas." },
+                    { text: "Iron", isCorrect: false, rationale: "Iron reacts with dilute hydrochloric acid to evolve hydrogen gas." }
+                ],
+                hint: "Look for the metal positioned below hydrogen in the reactivity series.",
+                tags: ["copper", "acids"]
+            },
+            {
+                questionNumber: 48,
+                question: "What type of chemical reaction is represented by the general equation: $AB \\xrightarrow{\\text{Energy}} A + B$?",
+                answerOptions: [
+                    { text: "Decomposition reaction", isCorrect: true, rationale: "Breaking down a single compound into simpler components using energy represents a decomposition reaction." },
+                    { text: "Direct combination reaction", isCorrect: false, rationale: "Combination involves joining substances (A + B -> AB)." },
+                    { text: "Single replacement reaction", isCorrect: false, rationale: "Single replacement involves an element and a compound." },
+                    { text: "Double replacement reaction", isCorrect: false, rationale: "Double replacement involves two compounds exchanging ions." }
+                ],
+                hint: "One reactant breaks down into multiple products.",
+                tags: ["decomposition", "equations"]
+            },
+            {
+                questionNumber: 49,
+                question: "Which metal is more reactive than iron according to the chemical reactivity series?",
+                answerOptions: [
+                    { text: "Zinc", isCorrect: true, rationale: "Zinc precedes iron in the chemical reactivity series, making zinc more reactive." },
+                    { text: "Copper", isCorrect: false, rationale: "Copper is less reactive than iron." },
+                    { text: "Silver", isCorrect: false, rationale: "Silver is less reactive than iron." },
+                    { text: "Gold", isCorrect: false, rationale: "Gold is much less reactive than iron." }
+                ],
+                hint: "Check the order: Potassium, Sodium, Calcium, Magnesium, Aluminum, Zinc, Iron...",
+                tags: ["reactivity_series", "zinc"]
+            },
+            {
+                questionNumber: 50,
+                question: "What is formed when sodium reacts with cold water in addition to hydrogen gas and heat?",
+                answerOptions: [
+                    { text: "Sodium hydroxide solution", isCorrect: true, rationale: "Sodium reacts with water to form alkaline sodium hydroxide solution ($NaOH$)." },
+                    { text: "Magnesium oxide", isCorrect: false, rationale: "Magnesium oxide is formed when magnesium burns in oxygen." },
+                    { text: "Copper sulphate", isCorrect: false, rationale: "Copper sulphate is a salt formed independently." },
+                    { text: "Calcium carbonate", isCorrect: false, rationale: "Calcium carbonate is a metal carbonate." }
+                ],
+                hint: "The formula is $NaOH$, which creates an alkaline solution.",
+                tags: ["sodium", "products"]
+            }
+        ];
+
+        let currentQuestionIndex = 0;
+        let score = 0;
+        let answeredCurrent = false;
+
+        const startScreen = document.getElementById('start-screen');
+        const quizScreen = document.getElementById('quiz-screen');
+        const resultsScreen = document.getElementById('results-screen');
+        const questionCounter = document.getElementById('question-counter');
+        const scoreTracker = document.getElementById('score-tracker');
+        const questionContainer = document.getElementById('question-container');
+        const optionsContainer = document.getElementById('options-container');
+        const rationaleBox = document.getElementById('rationale-box');
+        const hintBtn = document.getElementById('hint-btn');
+        const nextBtn = document.getElementById('next-btn');
+        const finalScore = document.getElementById('final-score');
+        const resultMessage = document.getElementById('result-message');
+
+        function startQuiz() {
+            currentQuestionIndex = 0;
+            score = 0;
+            startScreen.classList.add('hidden');
+            resultsScreen.classList.add('hidden');
+            quizScreen.classList.remove('hidden');
+            loadQuestion();
+        }
+
+        function loadQuestion() {
+            answeredCurrent = false;
+            nextBtn.classList.add('hidden');
+            rationaleBox.style.display = 'none';
+            rationaleBox.textContent = '';
+            hintBtn.style.display = 'inline-block';
+
+            const q = questions[currentQuestionIndex];
+            questionCounter.textContent = `Question ${q.questionNumber} of ${questions.length}`;
+            scoreTracker.textContent = `Score: ${score}`;
+            questionContainer.innerHTML = q.question;
+
+            optionsContainer.innerHTML = '';
+            // Shuffle options for interactivity
+            let shuffledOptions = [...q.answerOptions];
+            shuffledOptions.sort(() => Math.random() - 0.5);
+
+            shuffledOptions.forEach(opt => {
+                const btn = document.createElement('button');
+                btn.className = 'option-btn';
+                btn.innerHTML = opt.text;
+                btn.onclick = () => selectOption(opt, btn, shuffledOptions);
+                optionsContainer.appendChild(btn);
+            });
+        }
+
+        function showHint() {
+            const q = questions[currentQuestionIndex];
+            alert("Hint: " + q.hint);
+        }
+
+        function selectOption(selectedOpt, selectedBtn, allOptions) {
+            if (answeredCurrent) return;
+            answeredCurrent = true;
+            hintBtn.style.display = 'none';
+
+            const optionButtons = optionsContainer.getElementsByClassName('option-btn');
+            
+            // Highlight correct and incorrect
+            Array.from(optionButtons).forEach((btn, idx) => {
+                btn.disabled = true;
+                const optObj = allOptions[idx];
+                if (optObj.isCorrect) {
+                    btn.classList.add('correct');
+                } else if (btn === selectedBtn) {
+                    btn.classList.add('incorrect');
+                }
+            });
+
+            if (selectedOpt.isCorrect) {
+                score++;
+                scoreTracker.textContent = `Score: ${score}`;
+            }
+
+            rationaleBox.style.display = 'block';
+            rationaleBox.innerHTML = `<strong>Explanation:</strong> ${selectedOpt.rationale}`;
+            nextBtn.classList.remove('hidden');
+        }
+
+        function nextQuestion() {
+            currentQuestionIndex++;
+            if (currentQuestionIndex < questions.length) {
+                loadQuestion();
+            } else {
+                showResults();
+            }
+        }
+
+        function showResults() {
+            quizScreen.classList.add('hidden');
+            resultsScreen.classList.remove('hidden');
+            finalScore.textContent = `${score} / ${questions.length}`;
+
+            let percentage = (score / questions.length) * 100;
+            if (percentage === 100) {
+                resultMessage.textContent = "Outstanding! Perfect score! You have mastered Prep 3 Science chemical reactions.";
+                confetti({ particleCount: 150, spread: 80, origin: { y: 0.6 } });
+            } else if (percentage >= 80) {
+                resultMessage.textContent = "Great job! You have a very strong understanding of the lesson.";
+                confetti({ particleCount: 80, spread: 60, origin: { y: 0.6 } });
+            } else if (percentage >= 50) {
+                resultMessage.textContent = "Good effort! Review the PDF and try again to boost your score.";
+            } else {
+                resultMessage.textContent = "Keep practicing! Re-read the lesson sections in your El-Moasser notebook and try again.";
+            }
+        }
+
+        function restartQuiz() {
+            startQuiz();
+        }
+    </script>
+</body>
+</html>
+```eof
+
+I have generated a fully interactive, beautifully styled 50-question web quiz based strictly on your Prep 3 Science PDF lesson (Unit 1: Lesson 1 - Types of Chemical Reactions). It includes instant feedback, rationales, shuffle randomization, hints, and celebratory confetti upon completion! Enjoy practicing and mastering your science curriculum!
