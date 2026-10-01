@@ -34,15 +34,8 @@
             text-align: center;
             box-shadow: 0 4px 6px -1px rgba(0,0,0,0.1);
         }
-        header h1 {
-            margin: 0 0 0.5rem 0;
-            font-size: 1.8rem;
-        }
-        header p {
-            margin: 0;
-            opacity: 0.9;
-            font-size: 1rem;
-        }
+        header h1 { margin: 0 0 0.5rem 0; font-size: 1.8rem; }
+        header p { margin: 0; opacity: 0.9; font-size: 1rem; }
         main {
             flex: 1;
             max-width: 800px;
@@ -58,9 +51,7 @@
             padding: 2rem;
             margin-bottom: 2rem;
         }
-        .start-screen, .results-screen {
-            text-align: center;
-        }
+        .start-screen, .results-screen { text-align: center; }
         .btn {
             background-color: var(--primary);
             color: white;
@@ -74,13 +65,8 @@
             box-shadow: 0 4px 6px -1px rgba(79, 70, 229, 0.2);
             margin-top: 1rem;
         }
-        .btn:hover {
-            background-color: var(--primary-hover);
-            transform: translateY(-1px);
-        }
-        .btn:active {
-            transform: translateY(0);
-        }
+        .btn:hover { background-color: var(--primary-hover); transform: translateY(-1px); }
+        .btn:active { transform: translateY(0); }
         .quiz-header {
             display: flex;
             justify-content: space-between;
@@ -115,10 +101,7 @@
             color: var(--text-main);
             font-weight: 500;
         }
-        .option-btn:hover:not(:disabled) {
-            border-color: var(--primary);
-            background-color: #f1f5f9;
-        }
+        .option-btn:hover:not(:disabled) { border-color: var(--primary); background-color: #f1f5f9; }
         .option-btn.correct {
             background-color: #ecfdf5 !important;
             border-color: var(--success) !important;
@@ -147,9 +130,7 @@
             border-top: 1px solid var(--border);
             padding-top: 1rem;
         }
-        .hidden {
-            display: none !important;
-        }
+        .hidden { display: none !important; }
         .score-display {
             font-size: 3rem;
             font-weight: bold;
@@ -163,6 +144,14 @@
             font-size: 0.85rem;
             border-top: 1px solid var(--border);
         }
+        .progress { height: 8px; background: var(--border); border-radius: 99px; overflow: hidden; margin-bottom: 1rem; }
+        .progress-bar { height: 100%; width: 0; background: var(--primary); transition: width .3s; }
+        .hint-box { background: #fffbeb; border-left: 4px solid #f59e0b; padding: 1rem; border-radius: 0 8px 8px 0; margin-top: 1rem; display: none; }
+        .btn:disabled { opacity: .5; cursor: not-allowed; }
+        .review-list { text-align: left; margin-top: 1.5rem; }
+        .review-item { border: 1px solid var(--border); border-radius: 8px; padding: .75rem 1rem; margin-bottom: .75rem; }
+        .review-item small { color: var(--text-muted); display: block; margin-top: .25rem; }
+        .btn:focus-visible, .option-btn:focus-visible { outline: 3px solid #93c5fd; outline-offset: 2px; }
     </style>
 </head>
 <body>
@@ -176,22 +165,24 @@
         <!-- Start Screen -->
         <div id="start-screen" class="card start-screen">
             <h2>Ready to Test Your Knowledge?</h2>
-            <p>This quiz contains 50 questions meticulously designed from your Prep 3 Science curriculum materials (Unit 1: Lesson 1 - Types of Chemical Reactions). Answer each question carefully and review instant rationales!</p>
-            <button class="btn" onclick="startQuiz()">Start 50-Question Quiz</button>
+            <p>This quiz contains 50 questions from Unit 1, Lesson 1 – Types of Chemical Reactions. Questions are shuffled each time, and you get instant rationales.</p>
+            <button id="start-btn" class="btn" type="button">Start 50-Question Quiz</button>
         </div>
 
         <!-- Quiz Screen -->
         <div id="quiz-screen" class="card hidden">
+            <div class="progress"><div id="progress-bar" class="progress-bar"></div></div>
             <div class="quiz-header">
                 <span id="question-counter">Question 1 of 50</span>
                 <span id="score-tracker">Score: 0</span>
             </div>
             <div id="question-container" class="question-text"></div>
             <div id="options-container" class="options-container"></div>
-            <div id="rationale-box" class="rationale-box"></div>
+            <div id="hint-box" class="hint-box" aria-live="polite"></div>
+            <div id="rationale-box" class="rationale-box" aria-live="polite"></div>
             <div class="nav-footer">
-                <button id="hint-btn" class="btn" style="background-color: #64748b; padding: 0.5rem 1rem; font-size: 0.9rem;" onclick="showHint()">Show Hint</button>
-                <button id="next-btn" class="btn hidden" onclick="nextQuestion()">Next Question</button>
+                <button id="hint-btn" class="btn" type="button" style="background-color:#64748b;padding:.5rem 1rem;font-size:.9rem;">Show Hint</button>
+                <button id="next-btn" class="btn hidden" type="button">Next Question</button>
             </div>
         </div>
 
@@ -200,8 +191,9 @@
             <h2>Quiz Completed!</h2>
             <p>Here is your final performance:</p>
             <div id="final-score" class="score-display">0 / 50</div>
-            <p id="result-message">Great effort!</p>
-            <button class="btn" onclick="restartQuiz()">Try Again</button>
+            <p id="result-message"></p>
+            <button id="restart-btn" class="btn" type="button">Try Again</button>
+            <div id="review" class="review-list"></div>
         </div>
     </main>
 
@@ -496,7 +488,7 @@
                     { text: "A table listing compounds according to their solubility in water", isCorrect: false, rationale: "Solubility rules detail compound solubility, whereas CRS details metal reactivity." },
                     { text: "A list of gases arranged by density", isCorrect: false, rationale: "CRS pertains exclusively to chemical activity of metals." }
                 ],
-                hint: " think about how metals are ordered from Potassium/Sodium down to Gold.",
+                hint: "Think about how metals are ordered from Potassium/Sodium down to Gold.",
                 tags: ["crs", "definition"]
             },
             {
@@ -777,10 +769,10 @@
             },
             {
                 questionNumber: 48,
-                question: "What products are formed when metal nitrates undergo thermal decomposition?",
+                question: "What products are formed when alkali metal nitrates, such as sodium nitrate, undergo thermal decomposition?",
                 answerOptions: [
-                    { text: "Metal nitrite and oxygen gas", isCorrect: true, rationale: "Metal nitrates decompose on heating to yield metal nitrites and oxygen gas." },
-                    { text: "Metal oxide and nitrogen dioxide", isCorrect: false, rationale: "In Prep 3 curriculum, alkali nitrates like sodium nitrate decompose to metal nitrite + O2." },
+                    { text: "Metal nitrite and oxygen gas", isCorrect: true, rationale: "Metal nitrates (such as sodium nitrate) decompose on heating to yield metal nitrites and oxygen gas." },
+                    { text: "Metal oxide and nitrogen dioxide", isCorrect: false, rationale: "In the Prep 3 curriculum, alkali nitrates like sodium nitrate decompose to metal nitrite + O2." },
                     { text: "Metal hydroxide and ammonia", isCorrect: false, rationale: "Hydroxide and ammonia are not products of nitrate heating." },
                     { text: "Pure metal and nitrogen gas", isCorrect: false, rationale: "Nitrates yield nitrites and oxygen gas." }
                 ],
@@ -813,109 +805,152 @@
             }
         ];
 
-        let currentQuestionIndex = 0;
-        let score = 0;
-        let selectedOption = null;
+        /* ---------- Quiz logic ---------- */
+        const $ = id => document.getElementById(id);
+        const fmt = t => t.replace(/->/g, "→");
+
+        let order = [], current = 0, score = 0, answered = false, missed = [];
+
+        function shuffle(arr) {
+            const a = [...arr];
+            for (let i = a.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [a[i], a[j]] = [a[j], a[i]];
+            }
+            return a;
+        }
 
         function startQuiz() {
-            document.getElementById("start-screen").classList.add("hidden");
-            document.getElementById("quiz-screen").classList.remove("hidden");
-            currentQuestionIndex = 0;
-            score = 0;
+            order = shuffle(questions).map(q => ({ ...q, answerOptions: shuffle(q.answerOptions) }));
+            current = 0; score = 0; missed = [];
+            $("start-screen").classList.add("hidden");
+            $("results-screen").classList.add("hidden");
+            $("quiz-screen").classList.remove("hidden");
             showQuestion();
         }
 
         function showQuestion() {
-            const q = questions[currentQuestionIndex];
-            document.getElementById("question-counter").innerText = `Question ${currentQuestionIndex + 1} of ${questions.length}`;
-            document.getElementById("score-tracker").innerText = `Score: ${score}`;
-            document.getElementById("question-container").innerText = `${q.questionNumber}. ${q.question}`;
-            
-            const optionsContainer = document.getElementById("options-container");
-            optionsContainer.innerHTML = "";
-            
-            const rationaleBox = document.getElementById("rationale-box");
-            rationaleBox.style.display = "none";
-            rationaleBox.innerHTML = "";
+            const q = order[current];
+            answered = false;
 
-            document.getElementById("hint-btn").classList.remove("hidden");
-            document.getElementById("next-btn").classList.add("hidden");
+            $("question-counter").textContent = `Question ${current + 1} of ${order.length}`;
+            $("score-tracker").textContent = `Score: ${score}`;
+            $("progress-bar").style.width = `${(current / order.length) * 100}%`;
+            $("question-container").textContent = `${current + 1}. ${fmt(q.question)}`;
 
-            q.answerOptions.forEach((option, index) => {
-                const button = document.createElement("button");
-                button.className = "option-btn";
-                button.innerText = option.text;
-                button.onclick = () => selectOption(button, option);
-                optionsContainer.appendChild(button);
+            $("hint-box").style.display = "none";
+            $("rationale-box").style.display = "none";
+            $("hint-btn").disabled = false;
+            $("hint-btn").classList.remove("hidden");
+            $("next-btn").classList.add("hidden");
+            $("next-btn").textContent = current === order.length - 1 ? "See Results" : "Next Question";
+
+            const container = $("options-container");
+            container.innerHTML = "";
+            q.answerOptions.forEach((option, i) => {
+                const btn = document.createElement("button");
+                btn.type = "button";
+                btn.className = "option-btn";
+                btn.textContent = `${i + 1}. ${fmt(option.text)}`;
+                btn.addEventListener("click", () => selectOption(btn, option));
+                container.appendChild(btn);
             });
         }
 
         function selectOption(button, option) {
-            const buttons = document.querySelectorAll(".option-btn");
-            buttons.forEach(btn => btn.disabled = true);
+            if (answered) return;
+            answered = true;
 
-            const q = questions[currentQuestionIndex];
-            
+            const q = order[current];
+            const buttons = document.querySelectorAll(".option-btn");
+            buttons.forEach(b => (b.disabled = true));
+
             if (option.isCorrect) {
                 button.classList.add("correct");
                 score++;
-                document.getElementById("score-tracker").innerText = `Score: ${score}`;
             } else {
                 button.classList.add("incorrect");
-                buttons.forEach((btn, idx) => {
-                    if (q.answerOptions[idx].isCorrect) {
-                        btn.classList.add("correct");
-                    }
-                });
+                const right = q.answerOptions.findIndex(o => o.isCorrect);
+                buttons[right].classList.add("correct");
+                missed.push({ q: q.question, yours: option.text, correct: q.answerOptions[right].text });
             }
 
-            const rationaleBox = document.getElementById("rationale-box");
-            rationaleBox.innerHTML = `<strong>Rationale:</strong> ${option.rationale}`;
-            rationaleBox.style.display = "block";
+            $("score-tracker").textContent = `Score: ${score}`;
+            const box = $("rationale-box");
+            box.textContent = "";
+            const strong = document.createElement("strong");
+            strong.textContent = option.isCorrect ? "Correct! " : "Not quite. ";
+            box.append(strong, fmt(option.rationale));
+            box.style.display = "block";
 
-            document.getElementById("next-btn").classList.remove("hidden");
+            $("hint-btn").classList.add("hidden");
+            $("hint-box").style.display = "none";
+            $("next-btn").classList.remove("hidden");
+            $("next-btn").focus();
         }
 
         function showHint() {
-            const q = questions[currentQuestionIndex];
-            const rationaleBox = document.getElementById("rationale-box");
-            rationaleBox.innerHTML = `<strong>Hint:</strong> ${q.hint}`;
-            rationaleBox.style.display = "block";
+            if (answered) return;
+            const box = $("hint-box");
+            box.textContent = "💡 Hint: " + fmt(order[current].hint.trim());
+            box.style.display = "block";
         }
 
         function nextQuestion() {
-            currentQuestionIndex++;
-            if (currentQuestionIndex < questions.length) {
-                showQuestion();
-            } else {
-                showResults();
-            }
+            current++;
+            current < order.length ? showQuestion() : showResults();
         }
 
         function showResults() {
-            document.getElementById("quiz-screen").classList.add("hidden");
-            document.getElementById("results-screen").classList.remove("hidden");
-            document.getElementById("final-score").innerText = `${score} / ${questions.length}`;
+            $("quiz-screen").classList.add("hidden");
+            $("results-screen").classList.remove("hidden");
+            $("final-score").textContent = `${score} / ${order.length}`;
 
-            const percentage = (score / questions.length) * 100;
-            let message = "";
-            if (percentage >= 90) {
-                message = "Outstanding! You have mastered Prep 3 Science - Types of Chemical Reactions!";
-                confetti({ particleCount: 100, spread: 70, origin: { y: 0.6 } });
-            } else if (percentage >= 75) {
-                message = "Great job! You have a solid grasp of the concepts.";
-            } else if (percentage >= 50) {
-                message = "Good effort! Review the rationales and try again to improve your score.";
-            } else {
-                message = "Keep practicing! Review Unit 1 Lesson 1 materials and re-take the quiz.";
+            const pct = (score / order.length) * 100;
+            let msg;
+            if (pct >= 90) {
+                msg = "Outstanding! You have mastered Types of Chemical Reactions!";
+                if (typeof confetti === "function") confetti({ particleCount: 100, spread: 70, origin: { y: 0.6 } });
+            } else if (pct >= 75) msg = "Great job! You have a solid grasp of the concepts.";
+            else if (pct >= 50) msg = "Good effort! Review the questions below and try again.";
+            else msg = "Keep practicing! Review Unit 1 Lesson 1 and re-take the quiz.";
+            $("result-message").textContent = msg;
+
+            const review = $("review");
+            review.innerHTML = "";
+            if (missed.length) {
+                const h = document.createElement("h3");
+                h.textContent = `Review your ${missed.length} missed question${missed.length > 1 ? "s" : ""}`;
+                review.appendChild(h);
+                missed.forEach(m => {
+                    const d = document.createElement("div");
+                    d.className = "review-item";
+                    const p = document.createElement("div");
+                    p.textContent = fmt(m.q);
+                    const s = document.createElement("small");
+                    s.textContent = `Your answer: ${fmt(m.yours)}  |  Correct: ${fmt(m.correct)}`;
+                    d.append(p, s);
+                    review.appendChild(d);
+                });
             }
-            document.getElementById("result-message").innerText = message;
         }
 
-        function restartQuiz() {
-            document.getElementById("results-screen").classList.add("hidden");
-            startQuiz();
-        }
+        document.addEventListener("DOMContentLoaded", () => {
+            $("start-btn").addEventListener("click", startQuiz);
+            $("restart-btn").addEventListener("click", startQuiz);
+            $("next-btn").addEventListener("click", nextQuestion);
+            $("hint-btn").addEventListener("click", showHint);
+
+            document.addEventListener("keydown", e => {
+                if ($("quiz-screen").classList.contains("hidden")) return;
+                if (!answered && ["1", "2", "3", "4"].includes(e.key)) {
+                    const btn = document.querySelectorAll(".option-btn")[Number(e.key) - 1];
+                    if (btn) btn.click();
+                } else if (answered && (e.key === "Enter" || e.key === "ArrowRight")) {
+                    nextQuestion();
+                }
+            });
+        });
     </script>
 </body>
 </html>
